@@ -4,6 +4,12 @@ class About extends Component {
     render() {
         return (
             <div>
+
+
+
+
+
+            
             <h2>hihi</h2>
     </div>
         )
