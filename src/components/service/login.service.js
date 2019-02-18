@@ -8,7 +8,7 @@ export function loginUser(account,loginSuccess) {
             "password": account.password
         }
     }
-    var result = axios.post('http://localhost:3000/api/sign_in',acc).then(response => {
+    var result = axios.post('https://rteamserver.herokuapp.com/api/sign_in',acc).then(response => {
         if (response.status == 200){
             console.log(response.data.data.user_info);
             localStorage.setItem('current_user', JSON.stringify(response.data.data.user_info));
@@ -22,7 +22,7 @@ export function logoutUser(current_user, callback){
     var headers = {
         'RT-AUTH-TOKEN': current_user.authentication_token
     }
-    var result = axios.delete('http://localhost:3000/api/sign_out', {headers: headers}).then(response => {
+    var result = axios.delete('https://rteamserver.herokuapp.com/api/sign_out', {headers: headers}).then(response => {
         if (response.status == 200){
             console.log("logout success");
             localStorage.removeItem('current_user');

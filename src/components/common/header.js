@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUser } from '../service/login.service';
 import * as userAction from '../../actions/userAction';
+import * as userStatusAction from '../../actions/userStatusAction';
 import {checkCurrentUser} from '../service/login.service';
 
 class Header extends Component {
@@ -10,7 +11,8 @@ class Header extends Component {
     };
 
     setCurrentUser(value){
-        this.props.dispatch(userAction.addCurrentUser(value))    
+        this.props.dispatch(userAction.addCurrentUser(value))
+        this.props.dispatch(userStatusAction.addUserStatus(true));
     }
 
     componentDidMount(){
@@ -18,15 +20,17 @@ class Header extends Component {
     }
 
     onClickLogout = () => {
-        logoutUser(this.props.current_user,this.removeCurrenUser.bind(this))
+        logoutUser(this.props.current_user,this.removeCurrenUser.bind(this));
     }
 
     removeCurrenUser = () => {
         this.props.dispatch(userAction.addCurrentUser({}));
+        this.props.dispatch(userStatusAction.addUserStatus(false));
     }
 
     renderHeader = () => {
-        if (Object.keys(this.props.current_user).length != 0){
+        // if (Object.keys(this.props.current_user).length != 0){
+        if (this.props.current_user_status == true){
           return (
             <ul className="nav topnav">
                 <li className="dropdown">
@@ -157,7 +161,8 @@ class Header extends Component {
 
 function mapStateToProps(state, ownProps){
     return{
-        current_user: state.current_user
+        current_user: state.current_user,
+        current_user_status: state.current_user_status
     };
 }
 

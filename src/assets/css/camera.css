@@ -71,7 +71,7 @@
 	z-index: 2;
 }
 .camera_target_content .camera_link {
-    background: url("../img/camera/blank.gif");
+    /* background: url("../img/camera/blank.gif"); */
 	display: block;
 	height: 100%;
 	text-decoration: none;
@@ -408,8 +408,8 @@
 *	COLORS & SKINS
 *
 **************************/
-.pattern_1 .camera_overlayer {
-	background: url(../../img/camera/patterns/overlay1.png) repeat;
+/* .pattern_1 .camera_overlayer {
+	background: url(../img/camera/patterns/overlay1.png) repeat;
 }
 .pattern_2 .camera_overlayer {
 	background: url(../img/camera/patterns/overlay2.png) repeat;
@@ -437,7 +437,7 @@
 }
 .pattern_10 .camera_overlayer {
 	background: url(../img/camera/patterns/overlay10.png) repeat;
-}
+} */
 
 .camera_wrap .camera_pag .camera_pag_ul li {
 	background: #fff;
