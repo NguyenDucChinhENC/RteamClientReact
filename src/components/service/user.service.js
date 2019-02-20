@@ -11,18 +11,15 @@ export function getProfile(user_id,getSuccess) {
     });
 }
 
-export function editpro(user, current_user){
+export function editpro(users, current_user,updateSuccess){
     var headers = {
         'RT-AUTH-TOKEN': current_user.authentication_token
     }
-    var user = {
-        user
-    }
-    var result = axios.patch('https://rteamserver.herokuapp.com/api/users/' + current_user.id, current_user, {headers: headers}).then(response => {
+    console.log(users);
+    console.log('kjdskjsdkj');
+    var result = axios.patch('https://rteamserver.herokuapp.com/api/users/' + current_user.id, users, {headers: headers}).then(response => {
         if (response.status == 200){
-            console.log("update success");
-            // localStorage.removeItem('current_user');
-            // callback();
+            getProfile(users.id,updateSuccess)
         }
     });
 }

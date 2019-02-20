@@ -3,16 +3,28 @@ import { getProfile } from '../service/user.service';
 import { connect } from 'react-redux';
 
 class Profile extends Component {
-    componentDidMount() {
-        getProfile(this.props.match.params.id)
+    constructor(props){
+        super(props);
+        this.state = {
+            user: {}
+        }
     }
 
+    componentDidMount() {
+        getProfile(this.props.match.params.id, this.getUserSuccess.bind(this))
+    }
+
+    getUserSuccess(value){
+        this.state.user = value;
+        this.setState({user: this.state.user});
+        console.log(value);
+    }
 
     renderButtonEditOrFollow(){
       if (this.props.current_user_status == true) {
         if (this.props.match.params.id == this.props.current_user.id){
           return (
-            <a href="#" className="btn btn-warning btn-rounded">Edit profile</a>
+            <a href={'/user/edit'} className="btn btn-warning btn-rounded">Edit profile</a>
           )
         } else {
           return (
@@ -42,7 +54,7 @@ class Profile extends Component {
                     </div>
                     <div className="profile-usertitle">
                       <div className="profile-usertitle-name">
-                        Marcus Doe
+                        {this.state.user.name}
                       </div>
                       <div className="profile-usertitle-job">
                         Developer

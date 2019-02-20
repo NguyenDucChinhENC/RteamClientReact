@@ -20,6 +20,7 @@ import './assets/css/shortcodes.css';
 import './assets/css/default.css';
 import './assets/css/jquery.bxslider.css';
 import './assets/css/style.css';
+import './assets/css/color/default.css';
 
 
 const store = configureStore();
