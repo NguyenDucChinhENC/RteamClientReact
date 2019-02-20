@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { getProfile } from '../service/user.service';
 import { connect } from 'react-redux';
+import { IMG_URL } from '../../constan';
 
 class Profile extends Component {
     constructor(props){
@@ -16,6 +17,7 @@ class Profile extends Component {
 
     getUserSuccess(value){
         this.state.user = value;
+        this.state.user.avatar = IMG_URL + value.avatar;
         this.setState({user: this.state.user});
         console.log(value);
     }
@@ -50,7 +52,7 @@ class Profile extends Component {
                 <div className="col-md-3">
                   <div className="profile-sidebar">
                     <div className="profile-userpic">
-                      <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.0-9/46456138_2179737705616854_5669200979241730048_n.jpg?_nc_cat=109&_nc_oc=AQnMm6e87Tmp3MGYNRD6bOR_rPvmmmt_ibKnJ8V8FmV_ZCM27qcsw7JNLCgZesk585Y&_nc_ht=scontent.fhan2-3.fna&oh=a44382b4655d3e2ed4e3e3c1898e271c&oe=5CEF8C9F" className="img-responsive" alt="" />
+                      <img src={this.state.user.avatar} className="img-responsive" alt="" />
                     </div>
                     <div className="profile-usertitle">
                       <div className="profile-usertitle-name">

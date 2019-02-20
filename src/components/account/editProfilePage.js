@@ -3,6 +3,7 @@ import { getProfile } from '../service/user.service';
 import { editpro } from '../service/user.service';
 import { connect } from 'react-redux';
 import * as userAction from '../../actions/userAction';
+import { IMG_URL } from '../../constan';
 
 class EditProfile extends Component {
     constructor(props){
@@ -25,7 +26,6 @@ class EditProfile extends Component {
         return this.setState({user: this.state.user})
     }
 
-
     getUserSuccess(value){
         if (this.props.current_user.name != value.name){
           let current_user = {
@@ -37,11 +37,14 @@ class EditProfile extends Component {
           localStorage.setItem('current_user', JSON.stringify(current_user));
         }
         this.state.user = value;
+        this.state.user.avata = IMG_URL + value.avatar;
+        debugger;
         this.setState({user: this.state.user});
         console.log(value);
     }
 
     onClickSave(){
+      debugger;
         editpro(this.state.user, this.props.current_user, this.getUserSuccess.bind(this));
         console.log('hihi');
         console.log(this.state.user);
@@ -49,21 +52,29 @@ class EditProfile extends Component {
 
     }
 
+    onClickImage(){
+      var input = document.querySelector('#my_file');
+      input.click();
+    }
+
     previewFile() {
       var preview = document.querySelector('#avatar-user');
       var file = document.querySelector('input[type=file]').files[0];
       var reader  = new FileReader();
 
-      reader.onloadend = function () {
-        preview.src = reader.result;
-      }
-
+      reader.onloadend = this.setAvatarField.bind(this, reader, preview)
       
       if (file) {
         reader.readAsDataURL(file);
       } else {
         preview.src = "";
       }
+    }
+
+    setAvatarField(reader, preview){
+      preview.src = reader.result;
+      this.state.user.avatar =reader.result;
+      this.setState({user: this.state.user})
     }
 
     render() {
@@ -83,7 +94,7 @@ class EditProfile extends Component {
                 <div className="col-md-3">
                   <div className="profile-sidebar">
                     <div className="profile-userpic">
-                      <img src="https://scontent.fhan2-3.fna.fbcdn.net/v/t1.0-9/46456138_2179737705616854_5669200979241730048_n.jpg?_nc_cat=109&_nc_oc=AQnMm6e87Tmp3MGYNRD6bOR_rPvmmmt_ibKnJ8V8FmV_ZCM27qcsw7JNLCgZesk585Y&_nc_ht=scontent.fhan2-3.fna&oh=a44382b4655d3e2ed4e3e3c1898e271c&oe=5CEF8C9F" id="avatar-user" className="img-responsive" alt="" />
+                      <img src={this.state.user.avata} id="avatar-user" onClick={this.onClickImage} className="img-responsive" alt="" />
                     </div>
                     <div className="profile-usertitle">
                       <div className="profile-usertitle-name">
@@ -110,9 +121,7 @@ class EditProfile extends Component {
             </aside>
         </div>
 
-         
-
-            <div className="span8">
+            <div className="span8 flyLeft">
                 <div className="row controls">
                     <div className="span6 control-group">
                       <label>Your name (required)</label>
@@ -128,7 +137,7 @@ class EditProfile extends Component {
                     </div>
                     <div className="span3 control-group">
                       <label>Your Birthday)</label>
-                      <input type="text" name="birthday" value={this.state.user.birthday} maxlength="100" onChange={this.setCurrentUserState} className="span3" />
+                      <input type="date" name="birthday" value={this.state.user.birthday} maxlength="100" onChange={this.setCurrentUserState} className="span3" />
                     </div>
                     <div className="span3 control-group">
                       <label>Your Address</label>
@@ -138,10 +147,10 @@ class EditProfile extends Component {
                       <label>Your Country</label>
                       <input type="text" name="country" value={this.state.user.country} maxlength="100" onChange={this.setCurrentUserState} className="span3" />
                     </div>
-                    <input type='file' name="avatar" onChange={(e) => {this.previewFile(e); this.setCurrentUserState(e)}} className="span3" />
-                    <img src="" height="200" alt="Image preview..."/>
+                    {/* <input type="file" id="my_file" style="display: none;" /> */}
+                    <input type='file' id="my_file" name="avatar" onChange={(e) => {this.previewFile(e,this.setAvatarField); this.setCurrentUserState(e)}} className="span3" />
                 </div>
-                <a type="submit" className="btn btn-warning btn-rounded" onClick={this.onClickSave.bind(this)}>Save</a>
+                <a type="submit" className="btn btn-warning btn-rounded" onClick={this.onClickSave.bind(this) } >Save</a>
             </div>
       </div>
       </div>
