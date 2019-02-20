@@ -44,7 +44,6 @@ class EditProfile extends Component {
     }
 
     onClickSave(){
-      debugger;
         editpro(this.state.user, this.props.current_user, this.getUserSuccess.bind(this));
         console.log('hihi');
         console.log(this.state.user);
