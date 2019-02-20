@@ -2768,4 +2768,12 @@ ul.the-icons {
   background: url(../img/bodybg/bg10.png) repeat left top;
 }
 
+.table-info {
+  display:none
+}
+
+.preview-event {
+  padding-bottom:  10px;
+}
+
 /* Theme Styler :: End */

@@ -4,6 +4,8 @@ import About from './components/about/aboutPage';
 import LoginPage from './components/account/loginPage';
 import ProfilePage from './components/account/profilePage';
 import EditProfilePage from './components/account/editProfilePage';
+import NewEventPage from './components/event/newEventPage';
+import NewGroupPage from './components/group/newGroupPage';
 const Main = () => (
   <main>
     <Switch>
@@ -12,6 +14,8 @@ const Main = () => (
       <Route path='/login' component={LoginPage}/>
       <Route path='/users/:id' component={ProfilePage}/>
       <Route path='/user/edit' component={EditProfilePage} />
+      <Route path='/event/new' component={NewEventPage} />
+      <Route path='/group/new' component={NewGroupPage} />
     </Switch>
   </main>
 )

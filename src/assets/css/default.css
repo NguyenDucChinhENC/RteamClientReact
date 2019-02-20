@@ -59,3 +59,7 @@
   .profile-userbuttons .btn:last-child {
     margin-right: 0px;
   }
+
+  .preview-event {
+    padding-bottom:  10px;
+  }
