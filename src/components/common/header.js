@@ -34,7 +34,7 @@ class Header extends Component {
           return (
             <ul className="nav topnav">
                 <li className="dropdown">
-                <a href="index.html"><i className="icon-home"></i> Home <i className="icon-angle-down"></i></a>
+                <a href={'/'}><i className="icon-home"></i> Home <i className="icon-angle-down"></i></a>
                 <ul className="dropdown-menu">
                     <li><a href="index-alt2.html">Homepage 2</a></li>
                     <li><a href="index-alt3.html">Homepage 3</a></li>
@@ -79,17 +79,13 @@ class Header extends Component {
                 </ul>
                 </li> */}
                 <li className="dropdown">
-                <a href="index.html">{this.props.current_user.name} <i className="icon-angle-down"></i></a>
+                <a href={'/users/' + this.props.current_user.id}> {this.props.current_user.name}  <i className="icon-angle-down"></i></a>
                 <ul className="dropdown-menu">
-                    <li><a href="blog-left-sidebar.html">Blog left sidebar</a></li>
-                    <li><a href="blog-right-sidebar.html">Blog right sidebar</a></li>
-                    <li><a href="blog-fullwidth.html">Blog fullwidth</a></li>
-                    <li><a href="post-left-sidebar.html">Post left sidebar</a></li>
-                    <li><a href="post-right-sidebar.html">Post right sidebar</a></li>
+                    <li><a href={'/users/' + this.props.current_user.id}>Your Profile</a></li>
+                    <li><a onClick={this.onClickLogout.bind(this)}>Logout</a></li>
                 </ul>
                 </li>
                 <li>
-                <a onClick={this.onClickLogout.bind(this)}>Logout</a>
                 </li>
             </ul>
           )
@@ -101,9 +97,6 @@ class Header extends Component {
                     <ul className="dropdown-menu">
                         <li><a href="blog-left-sidebar.html">Blog left sidebar</a></li>
                         <li><a href="blog-right-sidebar.html">Blog right sidebar</a></li>
-                        <li><a href="blog-fullwidth.html">Blog fullwidth</a></li>
-                        <li><a href="post-left-sidebar.html">Post left sidebar</a></li>
-                        <li><a href="post-right-sidebar.html">Post right sidebar</a></li>
                     </ul>
                     </li>
                     <li>
@@ -124,7 +117,7 @@ class Header extends Component {
                     <div className="row nomargin">
                     <div className="span4">
                         <div className="logo">
-                        <a href="index.html"><img src={require('../../assets/img/logo.png')} alt="" /></a>
+                        <a href={'/'}><img src={require('../../assets/img/logo.png')} alt="" /></a>
                         </div>
                     </div>
                     <div className="span8">
