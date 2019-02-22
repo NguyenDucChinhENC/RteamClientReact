@@ -1,23 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createGroup } from '../service/group.service';
+import { browserHistory } from 'react-router';
 
 class NewGroup extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             group: {}
-        }    
+        }
     }
 
     setGroupState = (event) => {
         let field = event.target.name;
         let value = event.target.value;
         this.state.group[field] = value;
-        this.setState({group: this.state.group});
+        this.setState({ group: this.state.group });
     }
 
-    previewFile(){
+    previewFile() {
         let preview = document.querySelector('#image-group');
         let file = document.querySelector('input[type=file]').files[0];
         let reader = new FileReader;
@@ -37,8 +38,12 @@ class NewGroup extends React.Component {
         this.setState({ group: this.state.group });
     }
 
-    onClickSubmit(){
-        createGroup(this.props.current_user,this.state.group)
+    onClickSubmit() {
+        createGroup(this.props.current_user, this.state.group)
+    }
+
+    onSuccessCreate(id) {
+        this.props.history.push('/groups' + id);
     }
 
     render() {
@@ -74,44 +79,44 @@ class NewGroup extends React.Component {
                                             </div>
                                             <br></br>
                                             <div className="meta-post">
-                                            <aside className="left-sidebar">
-                                                <div className="post-image">
-                                                    <div className="post-heading">
+                                                <aside className="left-sidebar">
+                                                    <div className="post-image">
+                                                        <div className="post-heading">
+                                                        </div>
+                                                        <label>Name (required)</label>
+                                                        <textarea maxlength="5000"
+                                                            rows="2"
+                                                            name="name"
+                                                            className="span7"
+                                                            onChange={this.setGroupState} >
+                                                        </textarea>
                                                     </div>
-                                                    <label>Name (required)</label>
-                                                    <textarea maxlength="5000"
-                                                        rows="2"
-                                                        name="name"
-                                                        className="span7"
-                                                        onChange={this.setGroupState} >
-                                                    </textarea>
-                                                </div>
-                                                <div className="post-image">
-                                                    <div className="post-heading">
+                                                    <div className="post-image">
+                                                        <div className="post-heading">
+                                                        </div>
+                                                        <label>Descriptions (required)</label>
+                                                        <textarea maxlength="5000"
+                                                            rows="8"
+                                                            name="description"
+                                                            className="span7"
+                                                            onChange={this.setGroupState} >
+                                                        </textarea>
                                                     </div>
-                                                    <label>Descriptions (required)</label>
-                                                    <textarea maxlength="5000"
-                                                        rows="8"
-                                                        name="description"
-                                                        className="span7"
-                                                        onChange={this.setGroupState} >
-                                                    </textarea>
-                                                </div>
-                                                <div className=" span4" id="Tabs-Ketiga">
-                                                <div className="col-md-6">
-                                                    <div className="form-group ">
-                                                        <label>Upload Photo Event </label>
-                                                        <input type="file" id="my-file" name="photo" onChange={(e) => { this.previewFile(e, this.setCoverField) }} className="form-control" multiple="" />
-                                                    </div>
+                                                    <div className=" span4" id="Tabs-Ketiga">
+                                                        <div className="col-md-6">
+                                                            <div className="form-group ">
+                                                                <label>Upload Photo Event </label>
+                                                                <input type="file" id="my-file" name="photo" onChange={(e) => { this.previewFile(e, this.setCoverField) }} className="form-control" multiple="" />
+                                                            </div>
 
-                                                </div>
+                                                        </div>
+                                                    </div>
+                                                </aside>
                                             </div>
-                                            </aside>
-                                            </div>
-                                    <a className="btn btn-medium btn-danger btn-rounded pull-right" onClick={this.onClickSubmit.bind(this)}>Submit</a>
+                                            <a className="btn btn-medium btn-danger btn-rounded pull-right" onClick={this.onClickSubmit.bind(this)}>Submit</a>
 
                                             <aside className="left-sidebar">
-                                                
+
                                             </aside>
                                         </div>
                                         <div className="span3 flyRight">

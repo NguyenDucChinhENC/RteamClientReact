@@ -35,7 +35,8 @@ class NewEvent extends React.Component {
     }
 
     onClickSubmit() {
-        createEvent(this.props.current_user, this.state.event);
+        let id_group = this.props.match.params.id;
+        createEvent(this.props.current_user, this.state.event, id_group);
     }
 
     setPhotoField(reader, preview) {
