@@ -1490,7 +1490,9 @@ p.indent{ padding-left: 1.8em }
   max-height:200px;
 }
 
-
+.show-on-hover:hover > ul.dropdown-menu {
+  display: block;    
+}
 
 
 
