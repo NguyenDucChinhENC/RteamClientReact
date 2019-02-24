@@ -41,7 +41,7 @@ class NewEvent extends React.Component {
 
     setPhotoField(reader, preview) {
         preview.src = reader.result;
-        this.state.event.avatar = reader.result;
+        this.state.event.photo = reader.result;
         this.setState({ event: this.state.event });
     }
     render() {
