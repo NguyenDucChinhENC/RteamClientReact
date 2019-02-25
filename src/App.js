@@ -32,6 +32,7 @@ class App extends Component {
       <div className="App">
         <Header/>
         <Main updateCurrentUser={this.setCurrentUser.bind(this)}/>
+        {/* <script src={require('./assets/js/bootstrap.js')}></script> */}
         <script src={require('./assets/js/custom.js')}></script>
         <script src={require('./assets/js/animate.js')}></script>
         <script src={require('./assets/js/inview.js')}></script>
