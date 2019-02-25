@@ -21,6 +21,7 @@ import './assets/css/shortcodes.css';
 import './assets/css/default.css';
 import './assets/css/jquery.bxslider.css';
 import './assets/css/color/default.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const store = configureStore();

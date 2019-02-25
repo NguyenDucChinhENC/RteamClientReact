@@ -154,6 +154,8 @@ class Group extends React.Component {
                                         <li className="active"> {this.state.group.name}</li>
                                     </ul>
                                     <h2> {this.state.group.name} </h2>
+                                    <div className="pull-right">{this.renderButtonMember()}</div>
+                                    
                                 </div>
                             </div>
                         </div>

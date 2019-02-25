@@ -56,3 +56,46 @@ export function joinGroup(current_user,id_group, joinSuccess){
         }
     })
 }
+
+export function updateGroup(current_user, data, updateSuccess){
+    var headers = {
+        'RT-AUTH-TOKEN': current_user.authentication_token
+    };
+    
+    var result = axios.patch(SERVER_URL + 'groups/' + data.id, data, {headers: headers}). then(response => {
+        if(response.status == 200){
+            updateSuccess("Update Group");
+        }
+    })
+}
+
+export function acceptMember(current_user, id_member, updateSuccess){
+    var headers = {
+        'RT-AUTH-TOKEN': current_user.authentication_token
+    };
+
+    var data = {
+        member: {
+            accept: true
+        }
+    }
+
+    var result = axios.patch(SERVER_URL + 'member_groups/' + id_member, data, {headers: headers} ).then(response => {
+        if (response.status == 200){
+            updateSuccess("Accept");
+        }
+    })
+}
+
+export function denyGroup(current_user,id_membered_group, denySuccess){
+    var headers = {
+        'RT-AUTH-TOKEN': current_user.authentication_token
+    };
+
+    var result = axios.delete(SERVER_URL + 'member_groups/' + id_membered_group, {headers: headers}).then(response => {
+        if(response.status == 200){
+            debugger;
+            denySuccess("Deny ")
+        }
+    })
+}

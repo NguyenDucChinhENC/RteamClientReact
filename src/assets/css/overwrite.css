@@ -1494,6 +1494,141 @@ p.indent{ padding-left: 1.8em }
   display: block;    
 }
 
+.card {
+    margin-top: 250px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:100%;
+    min-height:400px;
+    background:#fff;
+    box-shadow:0 20px 50px rgba(0,0,0,.1);
+    border-radius:10px;
+    transition:0.5s;
+}
+.card:hover {
+    box-shadow:0 30px 70px rgba(0,0,0,.2);
+}
+.card .box {
+    position:absolute;
+    top:50%;
+    left:0;
+    transform:translateY(-50%);
+    text-align:center;
+    padding:20px;
+    box-sizing:border-box;
+    width:100%;
+}
+
+.wait {
+  width: 100%; height: 100%;
+}
+.pinkBg {
+  background-color: #ed184f!important;
+  background-image: linear-gradient(90deg, #fd5581, #fd8b55);
+}
+.intro-banner-vdo-play-btn{
+  height:60px;
+  width:60px;
+  position:absolute;
+  top:50%;
+  left:50%;
+  text-align:center;
+  margin:-30px 0 0 -30px;
+  border-radius:100px;
+  z-index:1
+}
+.intro-banner-vdo-play-btn i{
+  line-height:56px;
+  font-size:30px
+}
+.intro-banner-vdo-play-btn .ripple{
+  position:absolute;
+  width:160px;
+  height:160px;
+  z-index:-1;
+  left:50%;
+  top:50%;
+  opacity:0;
+  margin:-80px 0 0 -80px;
+  border-radius:100px;
+  -webkit-animation:ripple 1.8s infinite;
+  animation:ripple 1.8s infinite
+}
+
+@-webkit-keyframes ripple{
+  0%{
+      opacity:1;
+      -webkit-transform:scale(0);
+      transform:scale(0)
+  }
+  100%{
+      opacity:0;
+      -webkit-transform:scale(1);
+      transform:scale(1)
+  }
+}
+@keyframes ripple{
+  0%{
+      opacity:1;
+      -webkit-transform:scale(0);
+      transform:scale(0)
+  }
+  100%{
+      opacity:0;
+      -webkit-transform:scale(1);
+      transform:scale(1)
+  }
+}
+.intro-banner-vdo-play-btn .ripple:nth-child(2){
+  animation-delay:.3s;
+  -webkit-animation-delay:.3s
+}
+.intro-banner-vdo-play-btn .ripple:nth-child(3){
+  animation-delay:.6s;
+  -webkit-animation-delay:.6s
+}
+
+.tab {overflow: hidden; border: 1px solid #ccc; 
+  background-color: #f1f1f1;}
+  
+  .tabcontent {display: none; padding: 6px 12px; border: 1px solid #ccc;
+      border-top: none;}
+      
+  .tab button {background-color: inherit; float: left; border: none;
+      outline: none; cursor: pointer; padding: 14px 16px; 
+      transition: 0.3s;}
+      
+  .tab button:hover {background-color: #ddd;}
+  
+  .tab .active {background-color: #ccc;}
+  
+  .tabcontent {display: none; padding: 6px 12px;
+  
+  border: 1px solid #ccc; border-top: none;}
+  
+  table {font-family: arial, sans-serif; border-collapse: collapse;
+      width: 100%;}
+  
+  td, th {border: 1px solid #dddddd; padding: 8px; 
+      text-align: center;}
+  
+  /*Change color to gray*/
+  tr:nth-child(even) {
+      background-color: #dddddd;}
+  
+  .actived a{color:green}
+  .actived a:hover{ font-weight: bold}
+  
+  .deactivated a{color:red}
+  .deactivated a:hover{ font-weight: bold}
+  
+  .available {color:green; }
+  .disable{ color: red; font-weight: bold}
+  .intraining{color: blue; font-weight: bold}
+  .vacation{ font-weight: bold}
+  
 
 
 
