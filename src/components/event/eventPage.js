@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getEvent, joinEvent, leaveEvent } from '../service/event.service';
+import { editComment } from '../service/comment.service';
 import { IMG_URL } from '../../constan';
 import * as js from '../../assets/js/custom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import "react-tabs/style/react-tabs.css";
+import { ToastContainer, toast } from 'react-toastify';
 
 class Event extends React.Component {
     constructor(props) {
@@ -13,7 +15,8 @@ class Event extends React.Component {
             event: {},
             owner: {
                 name: null
-            }
+            },
+            comments: []
         }
     }
 
@@ -28,7 +31,7 @@ class Event extends React.Component {
     }
     getEventSuccess = (value) => {
         this.state.event = value.event;
-        this.setState({ event: this.state.event, owner: this.state.event.owner });
+        this.setState({ event: this.state.event, owner: this.state.event.owner, comments: this.state.event.comments });
     }
 
     onClickJoin() {
@@ -47,6 +50,31 @@ class Event extends React.Component {
     leaveSuccess() {
         this.state.event.member = false;
         this.setState({ event: this.state.event });
+    }
+
+    showFormEdit(id){
+        var comment = document.getElementById('form-' + id);
+        let value  = document.getElementById('comment-'+id).innerHTML;
+        var input = document.getElementById('input-comment-'+id);
+        input.value = value;
+        comment.style.display = "block";
+    }
+
+    onClickSave(id_comment, id){
+        var comment = document.getElementById('input-comment-'+id);
+        editComment(this.props.current_user, id_comment, comment.value, this.editSuccess.bind(this,id))
+    }
+
+    editSuccess(id,value){
+        var comment = document.getElementById('form-' + id);
+        this.state.event.comments[id].body = value;
+        this.setState({ event: this.state.event});
+        toast.success("Update Sucdess!")
+        comment.style.display = "none";
+    }
+
+    getValueComment(id){
+        let value  = document.getElementById('comment-'+id);
     }
 
     renderButtonMember = () => {
@@ -78,22 +106,36 @@ class Event extends React.Component {
         }
     }
 
+    renderListComments() {
+        return (
+            this.state.comments.map((comment, i) => {
+                return (
+                    <div className="media">
+                        <a href="#" className="pull-left"><img src="img/avatar.png" alt="" className="img-circle" /></a>
+                        <div className="media-body" >
+                            <div className="media-content">
+                                <h6></h6>
+                                <p id={"comment-" + i}>{comment.body}</p>
+                                <a onClick={this.showFormEdit.bind(this,i)} className="btn btn-mini btn-theme">Edit</a>
+                                <a href="#" className="align-right"><span>{"Comment" + comment.time_ago + "ago"}</span> by  {comment.user_name}</a>
+                                <div className="margintop10 form-comment" id={"form-" + i}>
+                                    <p>
+                                        <textarea rows="4" className="input-block-level" placeholder="*Your comment here" id={"input-comment-" + i}></textarea>
+                                        <button onClick={this.onClickSave.bind(this,comment.id, i)} className="btn btn-theme margintop10 pull-right" type="submit">Submit comment</button>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })
+        )
+    }
+
     render() {
         return (
             <div>
-                <Tabs>
-    <TabList>
-      <Tab>Title 1</Tab>
-      <Tab>Title 2</Tab>
-    </TabList>
-
-    <TabPanel>
-      <h2>Any content 1</h2>
-    </TabPanel>
-    <TabPanel>
-      <h2>Any content 2</h2>
-    </TabPanel>
-  </Tabs>
+                <ToastContainer />
                 <section id="inner-headline">
                     <div className="container">
                         <div className="row">
@@ -131,9 +173,56 @@ class Event extends React.Component {
 
                                 </article>
 
+                                <Tabs>
+                                    <TabList>
+                                        <Tab>Comments</Tab>
+                                        <Tab>List Members</Tab>
+                                    </TabList>
 
+                                    <TabPanel>
+                                        <div>
+                                            <div class="row" >
+                                                <div class="span8">
+                                                    <div className="comment-area">
+
+                                                        <h4>{this.state.comments.length} Comments</h4>
+                                                        {this.renderListComments()}
+                                                        <div className="marginbot30"></div>
+                                                        <h4>Leave your comment</h4>
+
+                                                        <form id="commentform" action="#" method="post" name="comment-form">
+                                                            <div className="row">
+                                                                <div className="span4">
+                                                                    <input type="text" placeholder="* Enter your full name" />
+                                                                </div>
+                                                                <div className="span4">
+                                                                    <input type="text" placeholder="* Enter your email address" />
+                                                                </div>
+                                                                <div className="span8 margintop10">
+                                                                    <input type="text" placeholder="Enter your website" />
+                                                                </div>
+                                                                <div className="span8 margintop10">
+                                                                    <p>
+                                                                        <textarea rows="12" className="input-block-level" placeholder="*Your comment here"></textarea>
+                                                                    </p>
+                                                                    <p>
+                                                                        <button className="btn btn-theme btn-medium margintop10" type="submit">Submit comment</button>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <h2 className="accordion-inner">Any content 2</h2>
+                                    </TabPanel>
+                                </Tabs>
 
                             </div>
+
                             <div className="span6">
 
                                 <h4>Accordion</h4>
