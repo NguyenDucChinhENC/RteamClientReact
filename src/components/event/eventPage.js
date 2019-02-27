@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getEvent, joinEvent, leaveEvent } from '../service/event.service';
-import { editComment } from '../service/comment.service';
+import { editComment, createComment, deleteComment } from '../service/comment.service';
 import { IMG_URL } from '../../constan';
 import * as js from '../../assets/js/custom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -16,7 +16,8 @@ class Event extends React.Component {
             owner: {
                 name: null
             },
-            comments: []
+            comments: [],
+            member_joined: []
         }
     }
 
@@ -31,19 +32,22 @@ class Event extends React.Component {
     }
     getEventSuccess = (value) => {
         this.state.event = value.event;
-        this.setState({ event: this.state.event, owner: this.state.event.owner, comments: this.state.event.comments });
+        this.setState({ event: this.state.event, owner: this.state.event.owner, comments: this.state.event.comments, member_joined: this.state.event.member_joined });
     }
 
     onClickJoin() {
+        debugger
         joinEvent(this.props.current_user, this.state.event.id, this.joinSuccess.bind(this))
     }
 
     joinSuccess(value) {
-        this.state.event.member = joinEvent.id;
+        debugger
+        this.state.event.member = value.id;
         this.setState({ event: this.state.event });
     }
 
     onClickLeave() {
+        debugger
         leaveEvent(this.props.current_user, this.state.event.member, this.leaveSuccess.bind(this));
     }
 
@@ -52,30 +56,74 @@ class Event extends React.Component {
         this.setState({ event: this.state.event });
     }
 
-    showFormEdit(id){
+    showFormEdit(id) {
         var comment = document.getElementById('form-' + id);
-        let value  = document.getElementById('comment-'+id).innerHTML;
-        var input = document.getElementById('input-comment-'+id);
+        let value = document.getElementById('comment-' + id).innerHTML;
+        var input = document.getElementById('input-comment-' + id);
         input.value = value;
         comment.style.display = "block";
     }
 
-    onClickSave(id_comment, id){
-        var comment = document.getElementById('input-comment-'+id);
-        editComment(this.props.current_user, id_comment, comment.value, this.editSuccess.bind(this,id))
+    onClickSave(id_comment, id) {
+        var comment = document.getElementById('input-comment-' + id);
+        editComment(this.props.current_user, id_comment, comment.value, this.editSuccess.bind(this, id))
     }
 
-    editSuccess(id,value){
+    editSuccess(id, value) {
         var comment = document.getElementById('form-' + id);
         this.state.event.comments[id].body = value;
-        this.setState({ event: this.state.event});
+        this.setState({ event: this.state.event });
         toast.success("Update Sucdess!")
         comment.style.display = "none";
     }
 
-    getValueComment(id){
-        let value  = document.getElementById('comment-'+id);
+    onClickSubmitComment() {
+        let comment = document.getElementById('input-new-comment');
+        createComment(this.props.current_user, this.state.event.id, comment.value, this.submitCommentSuccess.bind(this))
     }
+
+    submitCommentSuccess(value) {
+        let comments = this.state.event.comments
+        let input = document.getElementById('input-new-comment');
+        comments.push(value.object);
+        this.state.event.comments = comments;
+        this.state.event.comments[comments.length - 1].user_name = this.props.current_user.name;
+        this.state.event.comments[comments.length - 1].time_ago = "1 minute";
+        this.setState({ event: this.state.event });
+        input.value = "";
+        toast.success("New Comment Complete")
+    }
+
+    deleteComment(comment_id, i) {
+        deleteComment(this.props.current_user, comment_id, this.deleteCommentSuccess.bind(this, i));
+    }
+
+    deleteCommentSuccess(i) {
+        let comments = [...this.state.comments];
+        comments.splice(i, 1);
+        this.state.comments = comments;
+        this.setState({ comments: this.state.comments })
+        toast.warning("Delete Comment")
+    }
+
+    hideNumberPhone = (numberPhone) =>{
+        if (numberPhone != null){
+        let phone = numberPhone.toString();
+        if (phone.length > 2){
+        return  phone.substring(0,phone.length - 2) + '**';
+        }}else {
+            return numberPhone;
+        }
+    }
+
+    hideAddress = (address) =>{
+        if (address && address.length >= 9){
+        return '**********' + address.substring(8);
+        } else {
+            return address;
+        }
+    }
+
 
     renderButtonMember = () => {
         if (this.state.event.member) {
@@ -106,22 +154,33 @@ class Event extends React.Component {
         }
     }
 
+    renderButtonDelete = (comment, index) => {
+        if (this.state.event.admin || this.props.current_user.id == comment.user_id) {
+            return (
+                <a onClick={this.deleteComment.bind(this, comment.id, index)} className="btn btn-mini btn-theme margin-button">Delete</a>
+            )
+        }
+    }
+
     renderListComments() {
         return (
             this.state.comments.map((comment, i) => {
                 return (
                     <div className="media">
-                        <a href="#" className="pull-left"><img src="img/avatar.png" alt="" className="img-circle" /></a>
                         <div className="media-body" >
                             <div className="media-content">
                                 <h6></h6>
                                 <p id={"comment-" + i}>{comment.body}</p>
-                                <a onClick={this.showFormEdit.bind(this,i)} className="btn btn-mini btn-theme">Edit</a>
-                                <a href="#" className="align-right"><span>{"Comment" + comment.time_ago + "ago"}</span> by  {comment.user_name}</a>
+                                {this.props.current_user.id == comment.user_id &&
+                                    <a onClick={this.showFormEdit.bind(this, i)} className="btn btn-mini btn-theme margin-button">Edit</a>
+                                }
+                                {this.renderButtonDelete(comment, i)}
+                                {}
+                                <a href="#" className="align-right"><span>{"Comment " + comment.time_ago + "ago"}</span> by  {comment.user_name}</a>
                                 <div className="margintop10 form-comment" id={"form-" + i}>
                                     <p>
                                         <textarea rows="4" className="input-block-level" placeholder="*Your comment here" id={"input-comment-" + i}></textarea>
-                                        <button onClick={this.onClickSave.bind(this,comment.id, i)} className="btn btn-theme margintop10 pull-right" type="submit">Submit comment</button>
+                                        <button onClick={this.onClickSave.bind(this, comment.id, i)} className="btn btn-theme margintop10 pull-right" type="submit">Submit comment</button>
                                     </p>
                                 </div>
                             </div>
@@ -130,6 +189,30 @@ class Event extends React.Component {
                 )
             })
         )
+    }
+
+    renderListMembers() {
+        return (
+            this.state.member_joined.map((member, i) => {
+                return (
+                    <tr>
+                        <td>
+                            {i+1}
+                        </td>
+                        <td>
+                            {member.name}
+                        </td>
+                        <td>
+                            {this.hideNumberPhone(member.number_phone)}
+                        </td>
+                        <td>
+                            {this.hideAddress(member.address)}
+                        </td>
+                    </tr>
+                )
+            })
+        )
+
     }
 
     render() {
@@ -189,84 +272,42 @@ class Event extends React.Component {
                                                         {this.renderListComments()}
                                                         <div className="marginbot30"></div>
                                                         <h4>Leave your comment</h4>
-
-                                                        <form id="commentform" action="#" method="post" name="comment-form">
-                                                            <div className="row">
-                                                                <div className="span4">
-                                                                    <input type="text" placeholder="* Enter your full name" />
-                                                                </div>
-                                                                <div className="span4">
-                                                                    <input type="text" placeholder="* Enter your email address" />
-                                                                </div>
-                                                                <div className="span8 margintop10">
-                                                                    <input type="text" placeholder="Enter your website" />
-                                                                </div>
-                                                                <div className="span8 margintop10">
-                                                                    <p>
-                                                                        <textarea rows="12" className="input-block-level" placeholder="*Your comment here"></textarea>
-                                                                    </p>
-                                                                    <p>
-                                                                        <button className="btn btn-theme btn-medium margintop10" type="submit">Submit comment</button>
-                                                                    </p>
-                                                                </div>
+                                                        <div className="row">
+                                                            <div className="span8 margintop10">
+                                                                <p>
+                                                                    <textarea id="input-new-comment" rows="7" className="input-block-level" placeholder="*Your comment here"></textarea>
+                                                                </p>
+                                                                <p>
+                                                                    <button onClick={this.onClickSubmitComment.bind(this)} className="btn btn-theme btn-medium margintop10">Submit comment</button>
+                                                                </p>
                                                             </div>
-                                                        </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </TabPanel>
                                     <TabPanel>
-                                        <h2 className="accordion-inner">Any content 2</h2>
+                                        <div class="span6">
+                                            <h4 class="title"><strong>Members</strong> - list of people registered to participate<span></span></h4>
+
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>First Name</th>
+                                                        <th>Number Phone</th>
+                                                        <th>Address</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {this.renderListMembers()}
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </TabPanel>
                                 </Tabs>
 
-                            </div>
-
-                            <div className="span6">
-
-                                <h4>Accordion</h4>
-                                <div className="accordion" id="accordion2">
-                                    <div className="accordion-group">
-                                        <div className="accordion-heading">
-                                            <a className="accordion-toggle active" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                                <i className="icon-minus"></i> Collapsible Group Item #1 </a>
-                                        </div>
-                                        <div id="collapseOne" className="accordion-body collapse in">
-                                            <div className="accordion-inner">
-                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-                                                on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-group">
-                                        <div className="accordion-heading">
-                                            <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                                <i className="icon-plus"></i> Collapsible Group Item #2 </a>
-                                        </div>
-                                        <div id="collapseTwo" className="accordion-body collapse">
-                                            <div className="accordion-inner">
-                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-                                                on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                        </div>
-                                        </div>
-                                    </div>
-                                    <div className="accordion-group">
-                                        <div className="accordion-heading">
-                                            <a className="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                                <i className="icon-plus"></i> Collapsible Group Item #3 </a>
-                                        </div>
-                                        <div id="collapseThree" className="accordion-body collapse">
-                                            <div className="accordion-inner">
-                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird
-                                                on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer
-                                                farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

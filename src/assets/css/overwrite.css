@@ -1594,6 +1594,10 @@ p.indent{ padding-left: 1.8em }
   display: none;
 }
 
+.margin-button {
+  margin-right: 20px;
+}
+
 .tab {overflow: hidden; border: 1px solid #ccc; 
   background-color: #f1f1f1;}
   
