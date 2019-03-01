@@ -39,6 +39,8 @@ class ListEvent extends React.Component {
   }
 
   event = (events) => {
+    debugger;
+    if (events.length >0){
     return (
       events.map((event, i) => {
         return (
@@ -72,13 +74,13 @@ class ListEvent extends React.Component {
         )
       })
     )
-
+    }
   }
 
   render() {
     return (
       <div>
-        {this.event(this.props.events)}
+        {this.event.bind(this,this.props.events)}
       </div>
     )
   }

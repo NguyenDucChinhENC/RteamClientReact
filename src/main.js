@@ -10,6 +10,7 @@ import GroupPage from './components/group/groupPage';
 import editGroupPage from './components/group/editGroupPage';
 import eventPage from './components/event/eventPage';
 import editEventPage from './components/event/editEventPage';
+import listGroupPage from './components/about/listGroupPage';
 
 const PrivateRoute = ({ component: Component, ...rest}) =>(
   <Route {...rest} render={(props) => (
@@ -33,6 +34,7 @@ const Main = () => (
         <PrivateRoute path='/group/edit/:id' component={editGroupPage}/>
         <Route path='/events/:id' component={eventPage} />
         <Route path='/event/edit/:id' component={editEventPage} />
+        <Route path='/groups' component={listGroupPage} />
       }
     </Switch>
   </main>
