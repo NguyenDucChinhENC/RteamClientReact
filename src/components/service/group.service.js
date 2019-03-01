@@ -99,3 +99,16 @@ export function denyGroup(current_user,id_membered_group, denySuccess){
         }
     })
 }
+
+export function getAllGroups(current_user,getSuccess){
+    var headers = {
+        'RT-AUTH-TOKEN' : current_user.authentication_token
+    };
+
+    var result = axios.get(SERVER_URL + 'groups', {headers: headers}).then(response => {
+        if(response.status == 200){
+            getSuccess(response.data.data);
+        }
+    })
+
+}

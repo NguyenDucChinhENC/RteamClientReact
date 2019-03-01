@@ -3,7 +3,8 @@ import { getProfile } from '../service/user.service';
 import { getAllEvents } from '../service/event.service';
 import { connect } from 'react-redux';
 import { IMG_URL } from '../../constan';
-import ModalImage from 'react-modal-image'
+import ModalImage from 'react-modal-image';
+import ListEvent from '../group/listEvent';
 
 class Profile extends Component {
   constructor(props) {
@@ -102,6 +103,9 @@ class Profile extends Component {
               </aside>
 
 
+            </div>
+            <div className="span8">
+                  <ListEvent events={this.state.events}/>
             </div>
           </div>
         </div>

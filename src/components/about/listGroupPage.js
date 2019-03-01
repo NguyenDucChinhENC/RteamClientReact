@@ -1,35 +1,52 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllEvents } from '../service/event.service';
-import ListEvent from '../group/listEvent';
+import { getAllGroups } from '../service/group.service';
 
-class About extends Component {
+class ListGroup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      events: [],
+      groups: [],
       events_comming: []
     }
   }
   componentWillReceiveProps(NextProps) {
     if (NextProps.current_user) {
       let id = this.props.match.params.id;
-      getAllEvents(NextProps.current_user, this.getAllEventsSuccess.bind(this));
+      getAllGroups(NextProps.current_user, this.getAllGroupsSuccess.bind(this));
     }
   }
-  getAllEventsSuccess = (value) => {
-    this.state.events = value.events;
-    this.state.events_comming = value.events_comming;
-    this.setState({ events: this.state.events, events_comming: this.state.events_comming });
+  getAllGroupsSuccess = (value) => {
+    this.state.groups = value.groups;
+    this.setState({ groups: this.state.groups});
   }
-  renderListEvent = (events) => {
+  renderListGroups = (groups) => {
     return (
-      events.map((event, i) => {
+      groups.map((group, i) => {
         return (
-          <li><a href={'/events/' + event.id}>{event.name}</a><span></span></li>
+          <li><a href={'/groups/' + group.id}>{group.name}</a><span></span></li>
         )
       })
     )
+  }
+
+  renderListGroup = () => {
+      return (
+          this.state.groups.map((group,i) => {
+              return (
+                <li className="item-thumbs span4 design"  data-id="id-0" data-type="design">
+                <div className="team-box thumbnail" href={'/groups/' + group.id}>
+                  <div className="caption">
+                    <h5><a href={'/groups/' + group.id}>{group.name.substring(0,25)}</a></h5>
+                    <p>
+                      Web designer
+                    </p>
+                  </div>
+                </div>
+              </li>
+              )
+          })
+      )
   }
   render() {
     return (
@@ -38,26 +55,18 @@ class About extends Component {
         <div className="container">
           <div className="row">
 
-            <div className="span4">
+            <div className="span3">
 
               <aside className="left-sidebar">
                 <div className="widget">
 
-                  <h5 className="widgetheading">{"Events Comming (" + this.state.events_comming.length + ")"}</h5>
+                  <h5 className="widgetheading">{"Events Comming (" + this.state.groups.length + ")"}</h5>
 
                   <ul className="cat">
-                    {this.renderListEvent(this.state.events_comming)}
+                    {this.renderListGroups(this.state.groups)}
                   </ul>
                 </div>
                 <hr></hr>
-                <div className="widget">
-
-                  <h5 className="widgetheading">{"Events (" + this.state.events.length + ")"}</h5>
-
-                  <ul className="cat">
-                    {this.renderListEvent(this.state.events)}
-                  </ul>
-                </div>
                 <div className="widget">
                   <div className="row profile">
                     <div className="col-md-3">
@@ -93,8 +102,12 @@ class About extends Component {
 
 
             </div>
-            <div className="span8">
-              <ListEvent events={this.state.events} />
+            <div className="span9">
+            <section id="team">
+                <ul className="s">
+                  {this.renderListGroup()}
+                  </ul>
+                  </section>
             </div>
           </div>
         </div>
@@ -109,4 +122,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(About);
+export default connect(mapStateToProps)(ListGroup);
